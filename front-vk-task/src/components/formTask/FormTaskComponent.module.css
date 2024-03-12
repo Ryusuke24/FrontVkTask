@@ -1,0 +1,22 @@
+.formTask {
+  margin-top: 10px;
+  border: 1px solid black;
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.textField {
+  resize: none;
+  width: 200px;
+  height: 300px;
+}
+
+.answer {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+}
