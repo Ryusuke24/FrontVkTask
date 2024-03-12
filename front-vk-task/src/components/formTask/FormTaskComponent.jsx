@@ -3,6 +3,7 @@ import style from "./FormTaskComponent.module.css";
 import { useEffect, useState } from "react";
 
 export const FormTaskComponent = () => {
+  const [cache, setCache] = useState({});
   const [error, setError] = useState(null);
   const [data, setData] = useState("");
   const [inputText, setInputText] = useState("");
@@ -12,51 +13,67 @@ export const FormTaskComponent = () => {
   const signal = controller.signal;
 
   function getFilteredUser(value) {
-    setError(null);
-    if (value.match(/\d+/g) || value === "") {
-      setError("Введите только буквы");
+    if (value in cache) {
+      setData(cache[value]);
     } else {
-      return fetch(`https://api.agify.io/?name=${value}`, { signal })
-        .then(res => {
-          if (!res.ok) {
-            throw new Error("Failed to fetch");
-          }
-          return res.json();
-        })
-        .then(data => {
-          setData(data);
-        })
-        .catch(e => setError(e.message));
+      setError(null);
+      if (!value.match(/[A-Za-z]+/g)) {
+        setError("Введите только буквы");
+      } else {
+        return fetch(`https://api.agify.io/?name=${value}`, { signal })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error("Failed to fetch");
+            }
+            return res.json();
+          })
+          .then(data => {
+            setData(data);
+            const clonedCache = cache;
+            clonedCache[data.name] = data;
+            setCache(clonedCache);
+          })
+          .catch(e => setError(e.message));
+      }
     }
   }
 
   useEffect(() => {
-    getFilteredUser(debouncedSearchQuery);
+    if (debouncedSearchQuery !== "") {
+      getFilteredUser(debouncedSearchQuery);
+    }
   }, [debouncedSearchQuery]);
 
   const onSubmit = async (e, value) => {
     e.preventDefault();
-
-    setError(null);
-    console.log("Дебаунсинг запрос отменен");
-    controller.abort();
-    if (value.match(/\d+/g) || value === "") {
-      setError("Введите только буквы");
+    if (value in cache) {
+      setData(cache[value]);
     } else {
-      try {
-        const res = await fetch(`https://api.agify.io/?name=${value}`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch");
-        }
-        const data = await res.json();
+      setError(null);
+      console.log("Дебаунсинг запрос отменен");
+      controller.abort();
+      if (!value.match(/[A-Za-z]+/g) || value === "") {
+        setError("Введите только буквы");
+      } else {
+        try {
+          const res = await fetch(`https://api.agify.io/?name=${value}`);
+          if (!res.ok) {
+            throw new Error("Failed to fetch");
+          }
+          const data = await res.json();
 
-        setData(data);
-      } catch (e) {
-        setError(e.message);
+          setData(data);
+
+          const clonedCache = cache;
+          clonedCache[data.name] = data;
+          setCache(clonedCache);
+        } catch (e) {
+          setError(e.message);
+        }
       }
     }
   };
-
+  console.log(cache);
   return (
     <div className={style.formTask}>
       {" "}
