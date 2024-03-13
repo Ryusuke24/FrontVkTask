@@ -93,11 +93,7 @@ export const FormTaskComponent = () => {
       ) : (
         data && (
           <div className={style.answer}>
-            <ul>
-              <li>Id : {data.count}</li>
-              <li>Name : {data.name}</li>
-              <li>Age : {data.age}</li>
-            </ul>
+            <p>Age : {data.age}</p>
           </div>
         )
       )}
