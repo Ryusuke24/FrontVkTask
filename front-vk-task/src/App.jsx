@@ -1,12 +1,10 @@
-import { FactTaskComponent } from "./components/factTask/FactTaskComponent";
 import "./App.css";
-import { FormTaskComponent } from "./components/formTask/FormTaskComponent";
+import { Layout } from "./layout";
 
 function App() {
   return (
     <div className="App">
-      <FactTaskComponent />
-      <FormTaskComponent />
+      <Layout />
     </div>
   );
 }

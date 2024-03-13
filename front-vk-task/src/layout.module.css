@@ -1,0 +1,32 @@
+.PanelButton {
+  border: 1px solid black;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  background-color: #242424;
+  color: white;
+  width: fit-content;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.GroupPanelButton {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 15px;
+}
+
+.layout {
+  display: flex;
+  justify-content: space-between;
+  gap: 150px;
+}
+
+.panelWindow {
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin-top: 10px;
+}
